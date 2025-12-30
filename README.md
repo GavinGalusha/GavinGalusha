@@ -1,98 +1,97 @@
-# Gavin Galusha
 
-**Software Engineer | Agentic AI Systems | Full-Stack**
 
-I’m a software engineer focused on **shipping production-grade agentic AI systems** — from LLM orchestration and RAG pipelines to data-heavy backends and modern frontends.
+## Hi 👋
 
-I care about **reliability, observability, and real users**, not demos.
-
-📫 gavingalusha@gmail.com  
+I’m a software engineer.  
+Most of my work lives in private repos, but I want to spotlight **MySplit** — a project I actively design, build, and run end-to-end.
 
 ---
 
-## 🚀 Featured Project — **MySplit**
-### AI-Native Gym Tracking & Coaching App  
-👉 **Live App:** https://mysplit-dun.vercel.app/
+## 🏋️ MySplit — Fixing What Workout Apps Get Wrong
+🔗 **Live web app:** https://mysplit-dun.vercel.app/
 
-**MySplit** is a full-stack, AI-native fitness platform that enables users to log workouts via **text, voice, and AI-assisted planning**, with an emphasis on usability and iteration in real environments.
+<!-- HERO IMAGE -->
+<p align="center">
+  <img src="./mysplit.png" alt="MySplit app screenshot" width="800" />
+</p>
 
-**Highlights**
-- Architected an **AI coaching system** using **LangGraph** featuring:
-  - Multi-step planning
-  - Schema-validated tool execution
-  - Retrieval-augmented generation (RAG)
-  - Traceable agent reasoning for reliability
-- Deployed and maintained the application across **web and iOS**, owning:
-  - Backend APIs and data models
-  - Infrastructure and deployment
-  - Iteration based on real user feedback
-- Designed for **low latency, debuggability, and cost-aware AI usage**
+Most workout apps fail for a simple reason:
 
-> MySplit reflects how I approach AI systems: structured, observable, and built for real users.
+> **Logging workouts is labor-intensive.**
+
+Typing sets, reps, weights, exercises, and notes every session is tedious, especially mid-workout. Over time, friction wins — and people stop logging consistently.
+
+MySplit is built around the idea that **the system should adapt to how humans actually record workouts**, not the other way around.
 
 ---
 
-## 🧠 What I Work On
-- 🤖 **Agentic AI systems** (LangGraph, LangChain, tool-calling, reflection, confidence routing)
-- 🔍 **RAG pipelines** (retrieval quality, grounding, evaluation)
-- 🏗️ **Full-stack applications** (Next.js, React, APIs, Postgres/Supabase)
-- 📊 **Data engineering** (large-scale datasets, analytics, ETL)
-- ⚙️ **Production AI concerns** (latency, cost control, failure modes)
+## The core idea
+
+Instead of forcing one rigid input method, MySplit lets users record workouts through **six different mediums**, all feeding into the same structured backend.
+
+### Ways to record workouts
+- **Text** — quick natural language input  
+  > “Push day, bench 3x8 at 185, incline DB press 3x10”
+- **Audio** — talk between sets instead of typing
+- **Video** — capture context when typing isn’t practical
+- **Previous workouts** — reuse and modify past sessions
+- **Notes** — loose thoughts that still get incorporated
+- **Manual selection** — traditional UI when precision matters
+
+Users can mix and match these freely. The system handles normalization.
 
 ---
 
-## 🛠️ Tech Stack
+## What makes this hard (and interesting)
 
-**Languages**  
-Python · TypeScript · SQL  
+Loose, human input still needs to become **clean, consistent data**.
 
-**Frontend**  
-React · Next.js · Tailwind  
+Under the hood, MySplit uses an **agentic AI system** built with **LangGraph** to:
 
-**Backend**  
-Node.js · REST APIs · Server Actions  
+- Break raw input into **explicit planning steps**
+- Convert intent into **schema-validated actions**
+- Ground decisions using **retrieval (RAG)** from:
+  - Past workouts
+  - Training plans
+  - User-specific history
+- Keep reasoning **traceable**, so failures are understandable instead of mysterious
 
-**AI / ML**  
-LangChain · LangGraph · OpenAI  
-RAG · Tool orchestration · Prompt engineering  
-
-**Data & Infra**  
-Postgres · Supabase  
-Docker · GCP · Palantir Foundry  
+This avoids the usual “chatbot glued to a CRUD app” problem and keeps the system predictable as it grows.
 
 ---
 
-## 💼 Experience
+## Platform support
 
-### Software Engineer — DataHAUL
-- Designed and shipped **Hermes AI**, a production agent using structured tool-calling, reflection loops, and confidence-based routing to handle complex, multi-step workflows.
-- Built and maintained **large-scale datasets** (2M+ GPS, ELD, and financial records) and exposed them via REST APIs powering real-time analytics and AI workflows.
-- Deployed 20+ workflows using **Palantir Foundry and GCP** within a React / Next.js application.
+MySplit exists as:
+- A **web app** built with **Next.js**
+- A **deployed mobile app** built with **React Native**
 
-### Researcher — University of Oulu
-- Selected as **1 of 6 out of 184 applicants** for a fully funded Summer of Research.
-- Investigated LLM applications in software engineering under senior AI researchers.
+Both share the same backend, data models, and AI logic.
 
 ---
 
-## 🎓 Education
-**Tulane University**  
-Double Major — Computer Science & Mathematics  
+## Tech behind the scenes
 
+This is a full-stack system I run end-to-end:
+
+- **Web:** Next.js, React
+- **Mobile:** React Native (deployed)
+- **Backend:** API routes + server actions
+- **AI:** LangGraph, LangChain, OpenAI APIs
+- **Data:** Postgres / Supabase
+- **Infra:** Deployed, monitored, and iterated based on real usage
+
+A lot of effort went into **latency control**, **tool boundaries**, and **minimizing unnecessary model calls** so the app feels fast during workouts.
 
 ---
 
-## 📈 How I Think About Engineering
-- Prefer **simple systems that fail loudly**
-- Design for **observability and iteration**
-- Optimize for **latency, cost, and correctness**
-- Ship → measure → refine
+## Why I built this
 
----
+MySplit is less about fitness specifically, and more about exploring:
 
-## 🌱 Outside of Code
-- Endurance training (marathon & Ironman)
-- Strong interest in math, optimization, and learning theory
-- Guitar Player
+- How to reduce friction in real user workflows
+- How to make AI systems **structured instead of fuzzy**
+- How to ship agentic systems that hold up under real use
 
-
+If you’re curious, the live app is here:
+👉 https://mysplit-dun.vercel.app/
