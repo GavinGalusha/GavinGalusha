@@ -44,21 +44,30 @@ Users can mix and match these freely. The system handles normalization.
 
 ## What makes this hard (and interesting)
 
-Loose, human input still needs to become **clean, consistent data**.
+MySplit is **AI-native** — the coach isn’t a feature layered on top of the app, it *is* the interface between users and the system.
 
-Under the hood, MySplit uses an **agentic AI system** built with **LangGraph** to:
+Loose, human input still needs to become **clean, consistent, structured data** that can support planning, history, and iteration over time.
 
-- Break raw input into **explicit planning steps**
-- Convert intent into **schema-validated actions**
-- Ground decisions using **retrieval (RAG)** from:
+Under the hood, the MySplit coach is an **agentic system** built with **LangGraph** that:
+
+- Explicitly plans before acting (no single-shot prompts)
+- Routes intent through **schema-validated tools** for logging, planning, and posting workouts
+- Uses retrieval (RAG) to ground decisions in:
   - Past workouts
   - Training plans
-  - User-specific history
-- Keep reasoning **traceable**, so failures are understandable instead of mysterious
+  - User-specific preferences and context
+- Maintains **tunable context boundaries**, so the coach can be adjusted without rewriting prompts or logic
+- Keeps execution and reasoning **traceable**, making failures debuggable instead of opaque
 
-This avoids the usual “chatbot glued to a CRUD app” problem and keeps the system predictable as it grows.
+This architecture allows the coach to:
+- Plan workouts
+- Post completed sessions
+- Modify existing plans
+- Reuse historical patterns  
+…without becoming brittle as the product grows.
 
----
+It avoids the common “chatbot glued to a CRUD app” trap and treats AI as a **first-class system component**.
+
 
 ## Platform support
 
