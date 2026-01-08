@@ -19,9 +19,10 @@ Most of my work lives in private repos, but I want to spotlight **MySplit** — 
 
 </p>
 
-<p>  
+ 
+
 🔗 **Live web app:** https://mysplit-dun.vercel.app/
-</p>
+--
 <!-- HERO IMAGE -->
 <p align="center">
   <img src="./mysplit.png" alt="MySplit app screenshot" width="800" />
