@@ -124,7 +124,7 @@ This is a full-stack system I run end-to-end, optimized for **latency, correctne
   - Clean reconciliation on refetch without UI jank
 
 - **Middleware & request hygiene**
-  - Centralized **Axios middleware** for rate limiting, auth, and path/payload validation
+  - Centralized **Redis middleware** for rate limiting, auth, and path/payload validation
   - Keeps API routes small, predictable, and safe by default
 
 A lot of effort went into **latency control**, **tool boundaries**, and **minimizing unnecessary model calls** so the app feels fast during workouts, where responsiveness matters most.
