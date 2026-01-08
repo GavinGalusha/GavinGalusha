@@ -1,5 +1,3 @@
-
-
 ## Hi 👋
 
 I’m a software engineer.  
@@ -35,7 +33,7 @@ Instead of forcing one rigid input method, MySplit lets users record workouts th
 - **Audio** — talk between sets instead of typing
 - **Video** — capture context when typing isn’t practical
 - **Previous workouts** — reuse and modify past sessions
-- **Notes** — loose thoughts that still get incorporated
+- **Notes** — derive workouts from natural language that persists across sessions
 - **Manual selection** — traditional UI when precision matters
 
 Users can mix and match these freely. The system handles normalization.
@@ -56,18 +54,20 @@ Under the hood, the MySplit coach is an **agentic system** built with **LangGrap
   - Past workouts
   - Training plans
   - User-specific preferences and context
-- Maintains **tunable context boundaries**, so the coach can be adjusted without rewriting prompts or logic
+- Maintains **tunable context boundaries**, allowing behavior changes without rewriting prompts
 - Keeps execution and reasoning **traceable**, making failures debuggable instead of opaque
 
 This architecture allows the coach to:
 - Plan workouts
 - Post completed sessions
-- Modify existing plans
+- Create and update user data from high-level statements  
+  (e.g. “I ran 5 miles every day this week” → 5 run activities)
 - Reuse historical patterns  
 …without becoming brittle as the product grows.
 
 It avoids the common “chatbot glued to a CRUD app” trap and treats AI as a **first-class system component**.
 
+---
 
 ## Platform support
 
@@ -81,16 +81,38 @@ Both share the same backend, data models, and AI logic.
 
 ## Tech behind the scenes
 
-This is a full-stack system I run end-to-end:
+This is a full-stack system I run end-to-end, optimized for **latency, correctness, and scale**:
 
 - **Web:** Next.js, React
 - **Mobile:** React Native (deployed)
 - **Backend:** API routes + server actions
 - **AI:** LangGraph, LangChain, OpenAI APIs
 - **Data:** Postgres / Supabase
-- **Infra:** Deployed, monitored, and iterated based on real usage
 
-A lot of effort went into **latency control**, **tool boundaries**, and **minimizing unnecessary model calls** so the app feels fast during workouts.
+### Performance, caching, and correctness
+
+- **Client & server caching**
+  - **React Query** for request deduplication, background refetching, and fine-grained cache invalidation
+  - **Redis** for shared caching of hot paths (profiles, feeds, recent workouts)
+
+- **Lazy loading & rendering control**
+  - Aggressive route-level and component-level lazy loading
+  - Heavy **`.glb` 3D muscle models** are virtualized with hard limits (only a few mounted at once) to avoid GPU and memory thrashing
+
+- **Database optimization**
+  - Indexed user profiles, social graphs, and workout queries for fast feed and profile loads
+  - **Database triggers** maintain derived user data and aggregates so reads stay cheap and consistent
+
+- **Optimistic UI with guarantees**
+  - Likes, follows, and social actions use **optimistic updates** for instant feedback
+  - All mutations are **idempotent**, making retries and race conditions safe
+  - Clean reconciliation on refetch without UI jank
+
+- **Middleware & request hygiene**
+  - Centralized **Axios middleware** for rate limiting, auth, and path/payload validation
+  - Keeps API routes small, predictable, and safe by default
+
+A lot of effort went into **latency control**, **tool boundaries**, and **minimizing unnecessary model calls** so the app feels fast during workouts, where responsiveness matters most.
 
 ---
 
