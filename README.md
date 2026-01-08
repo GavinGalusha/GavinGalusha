@@ -5,9 +5,23 @@ Most of my work lives in private repos, but I want to spotlight **MySplit** — 
 
 ---
 
-## 🏋️ MySplit — Fixing What Workout Apps Get Wrong
-🔗 **Live web app:** https://mysplit-dun.vercel.app/
 
+## MySplit — Fixing What Workout Apps Get Wrong
+<p align="center">
+  <!-- Icons -->
+  <img src="https://cdn.simpleicons.org/react/61DAFB" width="40" alt="React" />
+  <img src="https://cdn.simpleicons.org/nextdotjs/000000" width="40" alt="Next.js" />
+  <img src="https://cdn.simpleicons.org/supabase/3ECF8E" width="40" alt="Supabase" />
+  <img src="https://cdn.simpleicons.org/postgresql/316192" width="40" alt="PostgreSQL" />
+  <img src="https://cdn.simpleicons.org/redis/DC382D" width="40" alt="Redis" />
+
+  <img src="https://cdn.simpleicons.org/langchain/316192" width="40" alt="LangChain" />
+
+</p>
+
+<p>  
+🔗 **Live web app:** https://mysplit-dun.vercel.app/
+</p>
 <!-- HERO IMAGE -->
 <p align="center">
   <img src="./mysplit.png" alt="MySplit app screenshot" width="800" />
