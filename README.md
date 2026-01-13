@@ -5,139 +5,240 @@ Most of my work lives in private repos, but I want to spotlight **MySplit** — 
 
 ---
 
-
-## MySplit — Fixing What Workout Apps Get Wrong
+## MySplit — Workout Tracking for Lazy People (By Design)
 <p align="center">
-  <!-- Icons -->
+  <!-- Core stack -->
   <img src="https://cdn.simpleicons.org/react/61DAFB" width="40" alt="React" />
   <img src="https://cdn.simpleicons.org/nextdotjs/000000" width="40" alt="Next.js" />
   <img src="https://cdn.simpleicons.org/supabase/3ECF8E" width="40" alt="Supabase" />
   <img src="https://cdn.simpleicons.org/postgresql/316192" width="40" alt="PostgreSQL" />
   <img src="https://cdn.simpleicons.org/redis/DC382D" width="40" alt="Redis" />
 
-  <img src="https://cdn.simpleicons.org/langchain/316192" width="40" alt="LangChain" />
+  <!-- AI -->
 
+  <img src="https://cdn.simpleicons.org/langchain/316192" width="40" alt="LangChain" />
 </p>
 
- 
-
 🔗 **Live web app:** https://mysplit-dun.vercel.app/
---
-<!-- HERO IMAGE -->
+
 <p align="center">
   <img src="./mysplit.png" alt="MySplit app screenshot" width="800" />
 </p>
 
 Most workout apps fail for a simple reason:
 
-> **Logging workouts is labor-intensive.**
+> **Recording workouts takes too much effort.**
 
-Typing sets, reps, weights, exercises, and notes every session is tedious, especially mid-workout. Over time, friction wins — and people stop logging consistently.
+Typing sets, reps, weights, exercises, and notes *while you’re tired and sweaty* is friction-heavy.  
+Over time, friction wins — and people stop logging altogether.
 
-MySplit is built around the idea that **the system should adapt to how humans actually record workouts**, not the other way around.
+**MySplit flips this model.**  
+The app is built around one core principle:
 
----
-
-## The core idea
-
-Instead of forcing one rigid input method, MySplit lets users record workouts through **six different mediums**, all feeding into the same structured backend.
-
-### Ways to record workouts
-- **Text** — quick natural language input  
-  > “Push day, bench 3x8 at 185, incline DB press 3x10”
-- **Audio** — talk between sets instead of typing
-- **Video** — capture context when typing isn’t practical
-- **Previous workouts** — reuse and modify past sessions
-- **Notes** — derive workouts from natural language that persists across sessions
-- **Manual selection** — traditional UI when precision matters
-
-Users can mix and match these freely. The system handles normalization.
+> **Recording a workout should never be harder than the workout itself.**
 
 ---
 
-## What makes this hard (and interesting)
+## The core idea: effort should be optional
 
-MySplit is **AI-native** — the coach isn’t a feature layered on top of the app, it *is* the interface between users and the system.
+MySplit is intentionally designed for **lazy users**.
 
-Loose, human input still needs to become **clean, consistent, structured data** that can support planning, history, and iteration over time.
+You should be able to track:
+- **Everything** (sets, reps, weights, exercises), or
+- **Almost nothing** (“yes, I worked out”),  
+…and still get value from the system.
 
-Under the hood, the MySplit coach is an **agentic system** built with **LangGraph** that:
+Instead of forcing a single rigid input flow, MySplit supports **seven different recording mediums**, all normalized into the same structured backend.
 
-- Explicitly plans before acting (no single-shot prompts)
-- Routes intent through **schema-validated tools** for logging, planning, and posting workouts
-- Uses retrieval (RAG) to ground decisions in:
-  - Past workouts
-  - Training plans
-  - User-specific preferences and context
-- Maintains **tunable context boundaries**, allowing behavior changes without rewriting prompts
-- Keeps execution and reasoning **traceable**, making failures debuggable instead of opaque
+---
 
-This architecture allows the coach to:
-- Plan workouts
-- Post completed sessions
-- Create and update user data from high-level statements  
-  (e.g. “I ran 5 miles every day this week” → 5 run activities)
-- Reuse historical patterns  
-…without becoming brittle as the product grows.
+## 7 ways to record a workout (from max detail → zero effort)
 
-It avoids the common “chatbot glued to a CRUD app” trap and treats AI as a **first-class system component**.
+Users can choose *how much effort they want to spend* **every single day**.
+
+### 1. Text
+Natural language input.
+> “Push day — bench 3x8 @ 185, incline DB 3x10, cable flys”
+
+### 2. Audio
+Talk between sets instead of typing.  
+Perfect when hands are busy.
+
+### 3. Video
+Capture context when nothing else is practical.
+
+### 4. Previous workouts
+Reuse and slightly modify a past session in seconds.
+
+### 5. Notes
+Loose thoughts that persist and compound over time.
+> “Felt strong today, shoulders slightly tight”
+
+### 6. Manual selection
+Traditional UI for users who want precision and structure.
+
+### 7. **Single Tap (boolean logging)**
+**“I worked out today.”** ✅
+
+No exercises.  
+No reps.  
+No weights.  
+
+Just a single tap that records **yes/no**.
+
+This is intentional.
+
+> The system is built to support **a spectrum of detail**,  
+> from *full structured lifts* → *pure adherence tracking*.
+
+The backend handles normalization so users never have to “pay” effort they don’t have that day.
+
+---
+
+## Why this is hard (and interesting)
+
+Loose human input still needs to become:
+
+- Clean
+- Structured
+- Queryable
+- Comparable over time
+
+MySplit is **AI-native** — the AI isn’t bolted on later.  
+It is the interface between the user and the data model.
+
+Under the hood, the app turns:
+- Natural language
+- Partial information
+- Ambiguous intent  
+into **validated, structured writes** across workouts, activities, plans, and body metrics.
+
+---
+
+## The LangGraph agent (at the center of everything)
+
+MySplit’s coach is a **stateful, agentic system** built with **LangGraph**, not a single-shot chatbot.
+
+At a high level, the agent:
+
+- Accepts **messy, high-level user input**
+- Plans before acting
+- Loads *only* the context it needs (weights, workouts, Strava activity, plans)
+- Routes intent through **schema-validated tools**
+- Produces deterministic, debuggable state transitions
+
+### Key architectural traits
+
+- **Explicit state graph**
+  - Zod-defined state (intent, confidence, history, context, final output)
+  - Deterministic node transitions (agent → confidence → end)
+
+- **Tool-first execution**
+  - Every mutation (log workout, create plan, update weight, fetch Strava data) happens through a typed tool
+  - No free-form database writes
+
+- **Context-aware loading**
+  - The agent dynamically decides whether to load:
+    - Weights
+    - Past workouts
+    - Strava activities
+  - Hard caps prevent context bloat and runaway token usage
+
+- **Memory & replay**
+  - Checkpointed execution with `thread_id`
+  - Enables pause / resume, streaming, and traceability
+
+- **Streaming + observability**
+  - Token streaming to the UI
+  - Node-level lifecycle events (`node_start`, `node_end`, `done`)
+  - Failures are inspectable instead of opaque
+
+This avoids the classic **“chatbot glued to a CRUD app”** trap and treats AI as a **first-class system component**.
+
+---
+
+## External APIs & integrations
+
+This app is intentionally **not** self-contained — it coordinates multiple external systems.
+
+### APIs in active use
+
+- **OpenAI**
+  - Natural language → structured workout plans
+  - Agent reasoning, tool selection, and confidence scoring
+  - Streaming responses for real-time UX
+
+- **Strava**
+  - OAuth authentication
+  - Activity backfilling and incremental sync
+  - Unified activity model (runs, rides, metrics) alongside strength data
+
+- **Supabase**
+  - Auth (session cookies)
+  - Postgres database
+  - Storage (avatars)
+  - Row-level security
+
+- **Redis**
+  - Rate limiting
+  - Shared cache for hot reads (profiles, feeds)
+  - Middleware-level request hygiene
+
+These integrations are coordinated through server-side API routes and tool boundaries — not client hacks.
 
 ---
 
 ## Platform support
 
 MySplit exists as:
-- A **web app** built with **Next.js**
-- A **deployed mobile app** built with **React Native**
+- A **Next.js web app**
+- A **deployed React Native mobile app**
 
-Both share the same backend, data models, and AI logic.
+Both platforms share:
+- The same backend
+- The same data model
+- The same LangGraph agent
+- The same external API integrations
 
 ---
 
-## Tech behind the scenes
+## Performance, correctness, and scale
 
-This is a full-stack system I run end-to-end, optimized for **latency, correctness, and scale**:
+This is a full-stack system optimized for real usage during workouts:
 
-- **Web:** Next.js, React
-- **Mobile:** React Native (deployed)
-- **Backend:** API routes + server actions
-- **AI:** LangGraph, LangChain, OpenAI APIs
-- **Data:** Postgres / Supabase
+- **Caching**
+  - React Query for client-side deduplication and background refresh
+  - Redis for shared server cache
 
-### Performance, caching, and correctness
+- **Optimistic UI**
+  - Likes, follows, and social actions update instantly
+  - All writes are idempotent and safe under retries
 
-- **Client & server caching**
-  - **React Query** for request deduplication, background refetching, and fine-grained cache invalidation
-  - **Redis** for shared caching of hot paths (profiles, feeds, recent workouts)
+- **Database design**
+  - Indexed feeds, social graphs, workouts
+  - Triggers for derived fields and aggregates
+  - Cheap reads under load
 
-- **Lazy loading & rendering control**
-  - Aggressive route-level and component-level lazy loading
-  - Heavy **`.glb` 3D muscle models** are virtualized with hard limits (only a few mounted at once) to avoid GPU and memory thrashing
+- **Rendering control**
+  - Aggressive lazy loading
+  - Hard limits on heavy `.glb` 3D muscle models to avoid GPU thrashing
 
-- **Database optimization**
-  - Indexed user profiles, social graphs, and workout queries for fast feed and profile loads
-  - **Database triggers** maintain derived user data and aggregates so reads stay cheap and consistent
+- **Middleware**
+  - Centralized auth, rate limiting, and validation
+  - Keeps API routes predictable and secure
 
-- **Optimistic UI with guarantees**
-  - Likes, follows, and social actions use **optimistic updates** for instant feedback
-  - All mutations are **idempotent**, making retries and race conditions safe
-  - Clean reconciliation on refetch without UI jank
-
-- **Middleware & request hygiene**
-  - Centralized **Redis middleware** for rate limiting, auth, and path/payload validation
-  - Keeps API routes small, predictable, and safe by default
-
-A lot of effort went into **latency control**, **tool boundaries**, and **minimizing unnecessary model calls** so the app feels fast during workouts, where responsiveness matters most.
+A lot of effort went into making the app feel **fast when users are tired**, which is where most fitness apps fail.
 
 ---
 
 ## Why I built this
 
-MySplit is less about fitness specifically, and more about exploring:
+MySplit isn’t just about fitness.
 
-- How to reduce friction in real user workflows
-- How to make AI systems **structured instead of fuzzy**
-- How to ship agentic systems that hold up under real use
+It’s about:
+- Designing systems that respect human laziness
+- Turning fuzzy input into structured data
+- Shipping **agentic AI systems** that hold up under real use
 
 If you’re curious, the live app is here:
 👉 https://mysplit-dun.vercel.app/
